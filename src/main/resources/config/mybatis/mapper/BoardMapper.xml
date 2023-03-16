@@ -38,4 +38,12 @@
         SELECT COUNT(*)
         FROM board
     </select>
+    <select id="selectByKeyword" parameterType="string" resultMap="board">
+        SELECT * FROM board
+        INNER JOIN user
+        ON board.writerId = user.id
+        WHERE board.title LIKE concat('%', #{keyword}, '%')
+        OR
+        board.content LIKE concat('%', #{keyword}, '%')
+    </select>
 </mapper>

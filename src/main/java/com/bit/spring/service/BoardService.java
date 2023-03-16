@@ -44,6 +44,9 @@ public class BoardService {
         return total;
     }
 
+    public List<BoardDTO> selectByKeyword(String keyword){
+        return session.selectList(NAMESPACE + ".selectByKeyword", keyword);
+    }
 
     /*
     public void update(BoardDTO boardDTO){

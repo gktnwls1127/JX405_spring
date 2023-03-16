@@ -52,6 +52,7 @@ public class BoardController {
         model.addAttribute("lastPage", lastPage);
         model.addAttribute("startPage", start);
         model.addAttribute("endPage", end);
+        model.addAttribute("current", pageNo);
 
         return "/board/showAll";
     }
@@ -100,6 +101,13 @@ public class BoardController {
         //System.out.println("insert후 boardDTO : " + boardDTO);
 
         return "redirect:/board/showOne/"+boardDTO.getId();
+    }
+
+    @GetMapping("search")
+    public String search(String keyword, Model model){
+        model.addAttribute("list", boardService.selectByKeyword(keyword));
+
+        return "/board/showAll";
     }
         /*
 
