@@ -42,7 +42,7 @@
                         </div>
                     </li>
                 </ul>
-                <form class="d-flex" action="/board/search" method="get">
+                <form class="d-flex" action="/board/search/1" method="get">
                     <input class="form-control me-sm-2" type="search" placeholder="Search" name="keyword">
                     <button class="btn btn-secondary my-2 my-sm-0" type="submit">검색</button>
                 </form>
@@ -65,7 +65,7 @@
                         </thead>
                         <tbody>
                         <c:forEach items="${list}" var="item">
-                            <tr onclick="location.href = '/board/showOne/${item.id}'">
+                            <tr onclick="location.href = '${pagingAddr}/${item.id}'">
                                 <td>${item.id}</td>
                                 <td>${item.title}</td>
                                 <td>${item.writerNickname}</td>
@@ -77,24 +77,24 @@
                             <td colspan="5">
                                 <ul class="pagination">
                                     <li class="page-item">
-                                        <a class="page-link" href="/board/showAll/1">&laquo</a>
+                                        <a class="page-link" href="${pagingAddr}/1">&laquo</a>
                                     </li>
                                     <c:forEach var="i" begin="${startPage}" end="${endPage}">
                                         <c:choose>
                                             <c:when test="${i eq current}">
                                                 <li class="page-item active disabled">
-                                                    <a class="page-link" href="/board/showAll/${i}">${i}</a>
+                                                    <a class="page-link" href="${pagingAddr}/${i}">${i}</a>
                                                 </li>
                                             </c:when>
                                             <c:otherwise>
                                                 <li class="page-item">
-                                                    <a class="page-link" href="/board/showAll/${i}">${i}</a>
+                                                    <a class="page-link" href="${pagingAddr}/${i}">${i}</a>
                                                 </li>
                                             </c:otherwise>
                                         </c:choose>
                                     </c:forEach>
                                     <li>
-                                        <a class="page-link" href="/board/showAll/${lastPage}">&raquo</a>
+                                        <a class="page-link" href="${pagingAddr}/${lastPage}">&raquo</a>
                                     </li>
                                 </ul>
                             </td>

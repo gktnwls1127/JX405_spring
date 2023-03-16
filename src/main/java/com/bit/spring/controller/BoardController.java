@@ -53,6 +53,7 @@ public class BoardController {
         model.addAttribute("startPage", start);
         model.addAttribute("endPage", end);
         model.addAttribute("current", pageNo);
+        model.addAttribute("pagingAddr", "/board/showAll");
 
         return "/board/showAll";
     }
@@ -103,9 +104,11 @@ public class BoardController {
         return "redirect:/board/showOne/"+boardDTO.getId();
     }
 
-    @GetMapping("search")
-    public String search(String keyword, Model model){
+    @GetMapping("search/{pageNo}")
+    public String search(@PathVariable int pageNo, String keyword, Model model){
         model.addAttribute("list", boardService.selectByKeyword(keyword));
+        model.addAttribute("pagingAddr", "/search/" + keyword);
+        model.addAttribute("keyword", keyword);
 
         return "/board/showAll";
     }
