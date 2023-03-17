@@ -65,7 +65,7 @@
                         </thead>
                         <tbody>
                         <c:forEach items="${list}" var="item">
-                            <tr onclick="location.href = '${pagingAddr}/${item.id}'">
+                            <tr onclick="location.href = '/board/showOne/${item.id}'">
                                 <td>${item.id}</td>
                                 <td>${item.title}</td>
                                 <td>${item.writerNickname}</td>
@@ -77,24 +77,24 @@
                             <td colspan="5">
                                 <ul class="pagination">
                                     <li class="page-item">
-                                        <a class="page-link" href="${pagingAddr}/1">&laquo</a>
+                                        <a class="page-link" href="${pagingAddr}/1?keyword=${keyword}">&laquo</a>
                                     </li>
-                                    <c:forEach var="i" begin="${startPage}" end="${endPage}">
+                                    <c:forEach var="i" begin="${paging.start}" end="${paging.end}">
                                         <c:choose>
-                                            <c:when test="${i eq current}">
+                                            <c:when test="${i eq paging.current}">
                                                 <li class="page-item active disabled">
-                                                    <a class="page-link" href="${pagingAddr}/${i}">${i}</a>
+                                                    <a class="page-link" href="${pagingAddr}/${i}?keyword=${keyword}">${i}</a>
                                                 </li>
                                             </c:when>
                                             <c:otherwise>
                                                 <li class="page-item">
-                                                    <a class="page-link" href="${pagingAddr}/${i}">${i}</a>
+                                                    <a class="page-link" href="${pagingAddr}/${i}?keyword=${keyword}">${i}</a>
                                                 </li>
                                             </c:otherwise>
                                         </c:choose>
                                     </c:forEach>
                                     <li>
-                                        <a class="page-link" href="${pagingAddr}/${lastPage}">&raquo</a>
+                                        <a class="page-link" href="${pagingAddr}/${paging.totalPage}?keyword=${keyword}">&raquo</a>
                                     </li>
                                 </ul>
                             </td>

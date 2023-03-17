@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class BoardService {
@@ -44,55 +45,34 @@ public class BoardService {
         return total;
     }
 
-    public List<BoardDTO> selectByKeyword(String keyword){
-        return session.selectList(NAMESPACE + ".selectByKeyword", keyword);
+    public Map<String, Object> selectByKeyword(String keyword, int pageNo){
+        Map<String, Object> result = new HashMap<>();
+        Map<String, Object> params = new HashMap<>();
+        params.put("start", (pageNo-1) * PAGE_SIZE);
+        params.put("size", PAGE_SIZE);
+        params.put("keyword", keyword);
+
+        result.put("list", session.selectList(NAMESPACE + ".selectByKeyword", params));
+        result.put("totalPage", countSearchResult(keyword));
+        return result;
     }
 
-    /*
-    public void update(BoardDTO boardDTO){
-        String query = "UPDATE `board` SET `title` = ?, `content` = ? , `modify_date` = NOW() WHERE `id` = ?";
-        try {
-            PreparedStatement preparedStatement = connection.prepareStatement(query);
-            preparedStatement.setString(1, boardDTO.getTitle());
-            preparedStatement.setString(2, boardDTO.getContent());
-            preparedStatement.setInt(3, boardDTO.getId());
-
-            preparedStatement.executeUpdate();
-            preparedStatement.close();
-        } catch (SQLException e) {
-            e.printStackTrace();
+    public int countSearchResult(String keyword){
+        int temp = session.selectOne(NAMESPACE + ".countSearchResult", keyword);
+        int totalPage = temp / PAGE_SIZE;
+        if (temp % PAGE_SIZE != 0){
+            totalPage++;
         }
+        return totalPage;
+    }
+
+
+    public void update(BoardDTO attempt){
+        session.update(NAMESPACE + ".update", attempt);
     }
 
     public void delete(int id){
-        String query = "DELETE FROM `board` WHERE `id` = ?";
-        try {
-            PreparedStatement preparedStatement = connection.prepareStatement(query);
-            preparedStatement.setInt(1, id);
-
-            preparedStatement.executeUpdate();
-            preparedStatement.close();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+        session.delete(NAMESPACE+".delete", id);
     }
-
-    public void insert(BoardDTO boardDTO){
-        String query = "INSERT INTO `board`(`title`, `content`, `writerId`, `entry_date`, `modify_date`) VALUES (?, ?, ?, NOW(), NOW())";
-
-        try {
-            PreparedStatement pstmt = connection.prepareStatement(query);
-            pstmt.setString(1, boardDTO.getTitle());
-            pstmt.setString(2, boardDTO.getContent());
-            pstmt.setInt(3, boardDTO.getWriterId());
-
-            pstmt.executeUpdate();
-
-            pstmt.close();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
-*/
 
 }
