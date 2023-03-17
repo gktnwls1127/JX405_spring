@@ -1,17 +1,27 @@
 package com.bit.spring.service;
 
+import com.bit.spring.model.UserCustomDetails;
 import com.bit.spring.model.UserDTO;
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
-public class UserService {
+public class UserService implements UserDetailsService {
     private final String NAMESPACE = "mapper.UserMapper";
    private SqlSession session;
+   private BCryptPasswordEncoder passwordEncoder;
+
     @Autowired
-    public UserService(SqlSession session){
+    public UserService(SqlSession session, BCryptPasswordEncoder passwordEncoder){
         this.session = session;
+        this.passwordEncoder = passwordEncoder;
 
     }
 
@@ -34,13 +44,28 @@ public class UserService {
 
     }
 
-    public void update(UserDTO attempt){
-        session.update(NAMESPACE + ".update", attempt);
-    }
-
     public void delete(int id){
         session.delete(NAMESPACE + ".delete", id);
     }
+
+    @Override
+    public UserDetails loadUserByUsername(String s) throws UsernameNotFoundException {
+        UserDTO user = session.selectOne(NAMESPACE + ".validate", s);
+        if (user != null){ //해당 회원을 찾음
+            return new UserCustomDetails(user);
+
+        }
+        return null;
+    }
+
+    public List<UserDTO> selectAll(){
+        return session.selectList(NAMESPACE + ".selectAll");
+    }
+
+    public void update(UserDTO userDTO){
+        session.update(NAMESPACE + ".update", userDTO);
+    }
+
 
     /*
 

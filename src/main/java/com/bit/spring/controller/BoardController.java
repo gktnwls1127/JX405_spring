@@ -5,6 +5,7 @@ import com.bit.spring.model.UserDTO;
 import com.bit.spring.service.BoardService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.lang.Nullable;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -27,11 +28,9 @@ public class BoardController {
         this.boardService = boardService;
     }
     @GetMapping("showAll/{pageNo}")
-    public String showAll(HttpSession session, RedirectAttributes redirectAttributes, Model model, @PathVariable int pageNo){
-        if (session.getAttribute("logIn") == null){
-            redirectAttributes.addFlashAttribute("message", "다시 로그인해주세요.");
-            return "redirect:/";
-        }
+    public String showAll(Authentication authentication, Model model, @PathVariable int pageNo){
+        System.out.println(authentication.getName());
+        System.out.println(authentication.getAuthorities());
 
         model.addAttribute("list", boardService.selectAll(pageNo));
         model.addAttribute("paging", setPages(pageNo, boardService.selectLastPage()));

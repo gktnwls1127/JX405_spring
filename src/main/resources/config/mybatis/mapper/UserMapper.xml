@@ -17,4 +17,14 @@
         INSERT INTO user(username, password, nickname)
         VALUES(#{username}, #{password}, #{nickname})
     </insert>
+    <select id="selectAll" resultType="userDTO">
+        SELECT * FROM user
+    </select>
+    <update id="update" parameterType="userDTO">
+        UPDATE user
+        SET
+        password = #{password},
+        nickname = #{nickname}
+        WHERE id = #{id}
+    </update>
 </mapper>
