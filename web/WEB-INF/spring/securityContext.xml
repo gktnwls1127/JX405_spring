@@ -9,6 +9,8 @@
         <security:csrf disabled="true"/>
         <security:intercept-url pattern="/resources/**" access="permitAll()"/>
         <security:intercept-url pattern="/" access="permitAll()"/>
+        <security:intercept-url pattern="/user/auth" access="permitAll()"/>
+        <security:intercept-url pattern="/user/logout" access="isAuthenticated()"/>
         <security:intercept-url pattern="/**" access="isAuthenticated()"/>
         <security:form-login
                 username-parameter="username"
@@ -16,7 +18,21 @@
                 login-processing-url="/user/auth"
                 default-target-url="/board/showAll/1"
                 authentication-failure-handler-ref="userAuthFailHandler"
+                authentication-success-handler-ref="userAuthSuccessHandler"
                 login-page="/"
+        />
+        <security:logout
+            logout-url="/user/logout"
+            logout-success-url="/"
+            invalidate-session="true"
+        />
+<!--        데이터 기억하기 token-validity-seconds: 로그인 유지 시간 쿠키에 저장해서 진행됨-->
+        <security:remember-me
+            token-validity-seconds="60000"
+            key="sampleKey"
+            user-service-ref="userService"
+            authentication-success-handler-ref="userAuthSuccessHandler"
+            data-source-ref="datasource"
         />
     </security:http>
     <security:authentication-manager>

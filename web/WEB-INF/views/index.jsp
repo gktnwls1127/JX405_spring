@@ -16,6 +16,7 @@
                     <input type="text" name="username" class="form-control" id="input-username">
                     <label for="input-password">비밀번호</label>
                     <input type="password" name="password" class="form-control" id="input-password">
+                    <input type="checkbox" name="remember-me">
                     <button type="submit" class="btn btn-primary">로그인</button>
                     <a class="btn btn-outline-info" href="/user/register">회원가입 하기</a>
                 </form>
